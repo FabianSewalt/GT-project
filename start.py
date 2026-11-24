@@ -6,6 +6,59 @@ import matplotlib.pyplot as plt
 defect = 1
 cooperate = 0
 
+def rule_to_base_2(n):
+    """Converts a given decimal (i.e. base-10 integer) to a list containing the
+    base-2 equivalant."""
+
+    # n is the rule = number to be converted to base_k, k = base
+    base_2_list = []
+    base_2_part = n
+
+    while base_2_part > 0:
+        base_2_remainder = base_2_part % 2  # calculate remainder 
+        base_2_part = base_2_part // 2  # floor division
+        base_2_list.append(base_2_remainder)
+
+    base_2_list.reverse()
+    # 21 because the rule length should be 21.
+    base_2_list = [0] * (21 - len(base_2_list)) + base_2_list
+
+    return base_2_list
+
+def make_rule_i(i):
+    if i < 0 or i >= 2**21:
+        raise ValueError("rule number must be between 0 and 2**21 - 1")
+    rule_list = rule_to_base_2(i)
+    C, D = cooperate, defect
+    standard_rule = {
+        (None, None, None, None): None,
+        (C, C, None, None): None,
+        (C, D, None, None): None,
+        (D, C, None, None): None,
+        (D, D, None, None): None,
+        (C, C, C, C): None,
+        (C, C, C, D): None,
+        (C, C, D, C): None,
+        (C, C, D, D): None,
+        (C, D, C, C): None,
+        (C, D, C, D): None,
+        (C, D, D, C): None,
+        (C, D, D, D): None,
+        (D, C, C, C): None,
+        (D, C, C, D): None,
+        (D, C, D, C): None,
+        (D, C, D, D): None,
+        (D, D, C, C): None,
+        (D, D, C, D): None,
+        (D, D, D, C): None,
+        (D, D, D, D): None,
+    }
+    for index, prev_moves in enumerate(standard_rule):
+        standard_rule[prev_moves] = rule_list[index]
+
+    return standard_rule
+        
+
 class game:
     def __init__(self):
         self.game_history = [[None, None], [None, None]]
@@ -13,6 +66,7 @@ class game:
         self.playerB_strategy = None
         self.pointsA = 0
         self.pointsB = 0
+        
 
     def do_one_game(self):
         # look into game history to define what the player should do next
@@ -28,7 +82,7 @@ class game:
         print(f"A {'defected' if output_A == defect else 'cooperated'} and B {'defected' if output_B == defect else 'cooperated'} resulting in {P_A} points for A and {P_B} points for B")
 
     def output_from_strategy(self, strategy, player):
-        if strategy not in self.all_strats_list():
+        if not isinstance(strategy, dict) and strategy not in self.all_strats_list():
             raise ValueError(f"{strategy} is not an existing strategy")
 
         if player == 'A':
@@ -41,6 +95,9 @@ class game:
             lastlast_other, lastlast_self = self.game_history[-2][0], self.game_history[-2][1]
             self_points = self.pointsB
             other_points = self.pointsA
+
+        if isinstance(strategy,dict):
+            return strategy[(last_self, last_other, lastlast_self, lastlast_other)]
 
         if strategy == 'titfortat':
             if last_self == last_other == None:
@@ -74,6 +131,7 @@ class game:
             if self_points % 2 == 0:
                 return defect
             return cooperate
+
 
     def set_playerA_strategy(self, strategy):
         self.playerA_strategy = strategy
@@ -109,7 +167,7 @@ class game:
 game1 = game()
 
 stratA = 'evenpoints'
-stratB = 'lookingback'
+stratB = 'titfortat'
 
 game1.set_playerA_strategy(stratA)
 game1.set_playerB_strategy(stratB)
