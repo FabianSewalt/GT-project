@@ -99,6 +99,7 @@ class game:
         if isinstance(strategy,dict):
             return strategy[(last_self, last_other, lastlast_self, lastlast_other)]
 
+        # made by Fabian
         if strategy == 'titfortat':
             if last_self == last_other == None:
                 return cooperate
@@ -201,30 +202,31 @@ class game:
         # 'evenpoints' defects if it has an even amount of points and cooperates otherwise
         return ['titfortat', 'defect', 'cooperate', 'anti-titfortat', 'pointcounter', 'anti-pointcounter', 'lookingback', 'tiktok', 'evenpoints', "biased_random_evil", "biased_random_friendly", "double_switchup", "become_more_evil", "sine_bias"]
 
-game1 = game()
+if __name__ == "__main__":
+    game1 = game()
 
-stratA = 'evenpoints'
-stratB = 'titfortat'
+    stratA = 'evenpoints'
+    stratB = 'titfortat'
 
-game1.set_playerA_strategy(stratA)
-game1.set_playerB_strategy(stratB)
+    game1.set_playerA_strategy(stratA)
+    game1.set_playerB_strategy(stratB)
 
-print(f"strategy A: {stratA}, strategy B: {stratB}")
+    print(f"strategy A: {stratA}, strategy B: {stratB}")
 
-number_of_games_list = []
-A_points_list = []
-B_points_list = []
+    number_of_games_list = []
+    A_points_list = []
+    B_points_list = []
 
-for i in range(200):
-    game1.do_one_game()
-    pointsA, pointsB = game1.get_points()
-    A_points_list.append(pointsA)
-    B_points_list.append(pointsB)
-    number_of_games_list.append(i+1)
+    for i in range(200):
+        game1.do_one_game()
+        pointsA, pointsB = game1.get_points()
+        A_points_list.append(pointsA)
+        B_points_list.append(pointsB)
+        number_of_games_list.append(i+1)
 
-plt.plot(number_of_games_list, A_points_list, label="points of A")
-plt.plot(number_of_games_list, B_points_list, label="points of B")
-plt.xlabel("number of games played")
-plt.ylabel('points')
-plt.legend()
-plt.show()
+    plt.plot(number_of_games_list, A_points_list, label="points of A")
+    plt.plot(number_of_games_list, B_points_list, label="points of B")
+    plt.xlabel("number of games played")
+    plt.ylabel('points')
+    plt.legend()
+    plt.show()
