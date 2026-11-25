@@ -79,7 +79,7 @@ class game:
         P_A, P_B = self.calculate_payoff(output_A, output_B)
         self.pointsA += P_A
         self.pointsB += P_B
-        print(f"A {'defected' if output_A == defect else 'cooperated'} and B {'defected' if output_B == defect else 'cooperated'} resulting in {P_A} points for A and {P_B} points for B")
+        # print(f"A {'defected' if output_A == defect else 'cooperated'} and B {'defected' if output_B == defect else 'cooperated'} resulting in {P_A} points for A and {P_B} points for B")
 
     def output_from_strategy(self, strategy, player):
         if not isinstance(strategy, dict) and strategy not in self.all_strats_list():
@@ -165,7 +165,7 @@ class game:
                 return cooperate
         if strategy == "sine_bias":
             self.sine_bias = math.sin((len(self.game_history) - 2)/(2 * np.pi))
-            if random.random() <= self.bias:
+            if random.random() <= self.sine_bias:
                 return defect
             else:
                 return cooperate
@@ -189,6 +189,10 @@ class game:
 
     def get_points(self):
         return self.pointsA, self.pointsB
+
+    def reset_points(self):
+        self.pointsA = 0
+        self.pointsB = 0
 
     def all_strats_list(self):
         # 'titfortat' cooperates at first game and then copies opponent
