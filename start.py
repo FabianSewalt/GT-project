@@ -79,7 +79,7 @@ class game:
         P_A, P_B = self.calculate_payoff(output_A, output_B)
         self.pointsA += P_A
         self.pointsB += P_B
-        print(f"A {'defected' if output_A == defect else 'cooperated'} and B {'defected' if output_B == defect else 'cooperated'} resulting in {P_A} points for A and {P_B} points for B")
+        # print(f"A {'defected' if output_A == defect else 'cooperated'} and B {'defected' if output_B == defect else 'cooperated'} resulting in {P_A} points for A and {P_B} points for B")
 
     def output_from_strategy(self, strategy, player):
         if not isinstance(strategy, dict) and strategy not in self.all_strats_list():
@@ -99,6 +99,7 @@ class game:
         if isinstance(strategy,dict):
             return strategy[(last_self, last_other, lastlast_self, lastlast_other)]
 
+        # made by Fabian
         if strategy == 'titfortat':
             if last_self == last_other == None:
                 return cooperate
@@ -189,6 +190,10 @@ class game:
     def get_points(self):
         return self.pointsA, self.pointsB
 
+    def reset_points(self):
+        self.pointsA = 0
+        self.pointsB = 0
+
     def all_strats_list(self):
         # 'titfortat' cooperates at first game and then copies opponent
         # 'cooperate' always cooperates
@@ -201,30 +206,31 @@ class game:
         # 'evenpoints' defects if it has an even amount of points and cooperates otherwise
         return ['titfortat', 'defect', 'cooperate', 'anti-titfortat', 'pointcounter', 'anti-pointcounter', 'lookingback', 'tiktok', 'evenpoints', "biased_random_evil", "biased_random_friendly", "double_switchup", "become_more_evil", "sine_bias"]
 
-game1 = game()
+if __name__ == "__main__":
+    game1 = game()
 
-stratA = 'tiktok'
-stratB = 'double_switchup'
+    stratA = 'evenpoints'
+    stratB = 'titfortat'
 
-game1.set_playerA_strategy(stratA)
-game1.set_playerB_strategy(stratB)
+    game1.set_playerA_strategy(stratA)
+    game1.set_playerB_strategy(stratB)
 
-print(f"strategy A: {stratA}, strategy B: {stratB}")
+    print(f"strategy A: {stratA}, strategy B: {stratB}")
 
-number_of_games_list = []
-A_points_list = []
-B_points_list = []
+    number_of_games_list = []
+    A_points_list = []
+    B_points_list = []
 
-for i in range(200):
-    game1.do_one_game()
-    pointsA, pointsB = game1.get_points()
-    A_points_list.append(pointsA)
-    B_points_list.append(pointsB)
-    number_of_games_list.append(i+1)
+    for i in range(200):
+        game1.do_one_game()
+        pointsA, pointsB = game1.get_points()
+        A_points_list.append(pointsA)
+        B_points_list.append(pointsB)
+        number_of_games_list.append(i+1)
 
-plt.plot(number_of_games_list, A_points_list, label="points of A")
-plt.plot(number_of_games_list, B_points_list, label="points of B")
-plt.xlabel("number of games played")
-plt.ylabel('points')
-plt.legend()
-plt.show()
+    plt.plot(number_of_games_list, A_points_list, label="points of A")
+    plt.plot(number_of_games_list, B_points_list, label="points of B")
+    plt.xlabel("number of games played")
+    plt.ylabel('points')
+    plt.legend()
+    plt.show()
