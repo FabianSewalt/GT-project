@@ -132,7 +132,44 @@ class game:
                 return defect
             return cooperate
 
+        # Tom's strategies
+        if strategy == "biased_random_evil":
+            if random.random() <= 0.3:
+                return cooperate
+            else:
+                return defect
+        if strategy == "biased_random_friendly":
+            if random.random() <= 0.3:
+                return defect
+            else:
+                return cooperate
+        if strategy == "double_switchup":
+            if last_self == cooperate:
+                if lastlast_self == cooperate:
+                    return defect
+                else:
+                    return cooperate
+            else:
+                if lastlast_self == defect:
+                    return cooperate
+                else:
+                    return defect
+        if strategy == "become_more_evil":
+            if last_self == None:
+                self.bias = 0
+            if random.random() <= self.bias:
+                return defect
+            else:
+                self.bias += 0.05
+                return cooperate
+        if strategy == "sine_bias":
+            self.sine_bias = math.sin((len(self.game_history) - 2)/(2 * np.pi))
+            if random.random() <= self.bias:
+                return defect
+            else:
+                return cooperate
 
+            
     def set_playerA_strategy(self, strategy):
         self.playerA_strategy = strategy
 
@@ -162,7 +199,7 @@ class game:
         # 'lookingback' defects if the oponent cooperated at least once in the last two moves and otherwise cooperates 
         # 'tiktok' starts with defecting and then does the opposite of what it previously did (so it will loop)
         # 'evenpoints' defects if it has an even amount of points and cooperates otherwise
-        return ['titfortat', 'defect', 'cooperate', 'anti-titfortat', 'pointcounter', 'anti-pointcounter', 'lookingback', 'tiktok', 'evenpoints']
+        return ['titfortat', 'defect', 'cooperate', 'anti-titfortat', 'pointcounter', 'anti-pointcounter', 'lookingback', 'tiktok', 'evenpoints', "biased_random_evil", "biased_random_friendly", "double_switchup", "become_more_evil", "sine_bias"]
 
 game1 = game()
 
