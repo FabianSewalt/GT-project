@@ -66,6 +66,8 @@ class game:
         self.playerB_strategy = None
         self.pointsA = 0
         self.pointsB = 0
+        self.bias = {}
+        self.sine_bias = {}
         
 
     def do_one_game(self):
@@ -157,15 +159,15 @@ class game:
                     return defect
         if strategy == "become_more_evil_random":
             if last_self == None:
-                self.bias = 0
-            if random.random() <= self.bias:
+                self.bias[player] = 0
+            if random.random() <= self.bias[player]:
                 return defect
             else:
-                self.bias += 0.05
+                self.bias[player] += 0.05
                 return cooperate
         if strategy == "sine_bias_random":
-            self.sine_bias = math.sin((len(self.game_history) - 2)/(2 * np.pi))
-            if random.random() <= self.sine_bias:
+            self.sine_bias[player] = math.sin((len(self.game_history) - 2)/(2 * np.pi))
+            if random.random() <= self.sine_bias[player]:
                 return defect
             else:
                 return cooperate
