@@ -164,7 +164,7 @@ class game:
                 return cooperate
         if strategy == "sine_bias":
             self.sine_bias = math.sin((len(self.game_history) - 2)/(2 * np.pi))
-            if random.random() <= self.bias:
+            if random.random() <= self.sine_bias:
                 return defect
             else:
                 return cooperate
@@ -203,7 +203,7 @@ class game:
 
 game1 = game()
 
-stratA = 'evenpoints'
+stratA = 'sine_bias'
 stratB = 'titfortat'
 
 game1.set_playerA_strategy(stratA)
