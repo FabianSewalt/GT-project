@@ -155,7 +155,7 @@ class game:
                     return cooperate
                 else:
                     return defect
-        if strategy == "become_more_evil":
+        if strategy == "become_more_evil_random":
             if last_self == None:
                 self.bias = 0
             if random.random() <= self.bias:
@@ -163,7 +163,7 @@ class game:
             else:
                 self.bias += 0.05
                 return cooperate
-        if strategy == "sine_bias":
+        if strategy == "sine_bias_random":
             self.sine_bias = math.sin((len(self.game_history) - 2)/(2 * np.pi))
             if random.random() <= self.sine_bias:
                 return defect
@@ -204,7 +204,7 @@ class game:
         # 'lookingback' defects if the oponent cooperated at least once in the last two moves and otherwise cooperates 
         # 'tiktok' starts with defecting and then does the opposite of what it previously did (so it will loop)
         # 'evenpoints' defects if it has an even amount of points and cooperates otherwise
-        return ['titfortat', 'defect', 'cooperate', 'anti-titfortat', 'pointcounter', 'anti-pointcounter', 'lookingback', 'tiktok', 'evenpoints', "biased_random_evil", "biased_random_friendly", "double_switchup", "become_more_evil", "sine_bias"]
+        return ['titfortat', 'defect', 'cooperate', 'anti-titfortat', 'pointcounter', 'anti-pointcounter', 'lookingback', 'tiktok', 'evenpoints', "biased_random_evil", "biased_random_friendly", "double_switchup", "become_more_evil_random", "sine_bias_random"]
 
 if __name__ == "__main__":
     game1 = game()
