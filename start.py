@@ -203,8 +203,8 @@ class game:
 
 game1 = game()
 
-stratA = 'sine_bias'
-stratB = 'titfortat'
+stratA = 'tiktok'
+stratB = 'double_switchup'
 
 game1.set_playerA_strategy(stratA)
 game1.set_playerB_strategy(stratB)
