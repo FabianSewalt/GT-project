@@ -1,5 +1,5 @@
 from pyics import Model, GUI
-from start import game, cooperate, defect
+from start import game
 
 class TournamentSim(Model):
     def __init__(self):
