@@ -28,7 +28,6 @@ rule_table_blueprint = {
         (D, D, D, D): None,
     }
 game = start.game()
-cooperate, defect = 0, 1
 
 def encode_to_rule_table(game):
     # (last_A, last_B, lastlast_A, lastlast_B)
@@ -147,12 +146,11 @@ def mutation(rule_table, mutation_rate = 0.01):
 
 for mutation_rate in [0.01, 0.02, 0.03, 0.04, 0.05]:
     iterations = 100
+    # Step 1. encoding + initialization
+    # Switch all rules to rule tables (this will only work for non randomized rules)
     rule_table = encode_to_rule_table(game)
     max_score = []
     for i in range(iterations):
-        # Step 1. encoding + initialization
-        # Switch all rules to rule tables (this will only work for non randomized rules)
-
         # Step 2. Selection
         # select the fittest strategies at the current generation
         if i > 0:

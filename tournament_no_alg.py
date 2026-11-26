@@ -1,27 +1,40 @@
 from start import game
 import matplotlib.pyplot as plt
+import numpy as np
 
-tournament = game()
+# plan: plot game length on x - axis, average points after game against all others on y-axis per strategy
 
-all_strats = tournament.all_strats_list()
+all_strats = game().all_strats_list()
 
-game_length = 100
+game_lengths = np.arange(1, 200, 1)
 
-points_dict = {}
+# results[strat] = list of total points, one entry per game length
+results = {strat: [] for strat in all_strats}
+
+for game_len in game_lengths:
+    points_dict = {}
+    for strat in all_strats:
+        points_dict[strat] = 0
+    for i, stratA in enumerate(all_strats):
+        for j, stratB in enumerate(all_strats):
+            # playing every strat against every other strat once (and itself)
+            if i >= j:
+                match = game()
+                match.set_playerA_strategy(stratA)
+                match.set_playerB_strategy(stratB)
+                for x in range(game_len):
+                    match.do_one_game()
+                
+                Apoints, Bpoints = match.get_points()
+                points_dict[stratA] += Apoints
+                points_dict[stratB] += Bpoints
+
+    for strat in all_strats:
+        results[strat].append(points_dict[strat] / ((len(all_strats)-1)*game_len))
+
 for strat in all_strats:
-    points_dict[strat] = 0
-
-for stratA in all_strats:
-    for stratB in all_strats:
-        if stratA != stratB:
-            tournament.set_playerA_strategy(stratA)
-            tournament.set_playerB_strategy(stratB)
-            for i in range(game_length):
-                tournament.do_one_game()
-            
-            Apoints, Bpoints = tournament.get_points()
-            points_dict[stratA] += Apoints
-            points_dict[stratB] += Bpoints
-            tournament.reset_points()
-
-print(points_dict)
+    plt.plot(game_lengths, results[strat], label=strat)
+plt.xlabel("game length (rounds)")
+plt.ylabel("average points per round")
+plt.legend(fontsize=7)
+plt.show()
